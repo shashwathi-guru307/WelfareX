@@ -4,14 +4,10 @@ import { dashboardApi, alertsApi, casesApi } from '../services/api';
 import Header from '../components/layout/Header';
 import LoadingSpinner from '../components/common/LoadingSpinner';
 import ErrorMessage from '../components/common/ErrorMessage';
-import LightPillar from '../components/common/LightPillar';
-import { useTheme } from '../hooks/useTheme';
 import { formatDate, getInitials, formatIndianNumber } from '../utils/format';
 
 export default function Dashboard() {
   const navigate = useNavigate();
-  const { theme } = useTheme();
-  const isDark = theme === 'dark';
   const { data: stats, loading, error, refetch } = useApi(() => dashboardApi.getStats(), []);
   const { data: alertCounts } = useApi(() => alertsApi.getCounts(), []);
   const { data: caseStats } = useApi(() => casesApi.getStatistics(), []);
@@ -25,50 +21,32 @@ export default function Dashboard() {
 
   return (
     <>
-      {/* LightPillar background — subtle ambient effect, dark mode only */}
-      {isDark && (
-        <div className="fixed inset-0 pointer-events-none z-0" style={{ opacity: 0.15 }}>
-          <LightPillar
-            topColor="#3B1F8E"
-            bottomColor="#1a1040"
-            intensity={0.6}
-            rotationSpeed={0.15}
-            glowAmount={0.003}
-            pillarWidth={2.5}
-            pillarHeight={0.3}
-            noiseIntensity={0.3}
-            mixBlendMode="screen"
-            quality="medium"
-          />
-        </div>
-      )}
-
       <Header title="Administrative Dashboard" subtitle="Overview of registered workers, renewals, and welfare statistics" />
 
       <div className="p-6 space-y-6 relative z-10">
         {/* Stat Cards Row 1 — Workers & Registration */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
           {/* Total Applicants */}
-          <div onClick={() => navigate('/workers')} className="bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700 shadow-sm p-5 flex flex-col justify-between min-h-[140px] transition-all duration-200 hover:shadow-md hover:-translate-y-0.5 cursor-pointer">
+          <div onClick={() => navigate('/workers')} className="bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700 shadow-sm p-5 flex flex-col justify-between min-h-[140px] transition-all duration-200 hover:shadow-md hover:shadow-purple-500/5 hover:-translate-y-0.5 cursor-pointer">
             <div className="flex items-start justify-between">
               <div>
                 <p className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Total Applicants</p>
                 <p className="text-3xl font-bold text-gray-900 dark:text-white mt-2">{formatIndianNumber(stats.total_registered_workers)}</p>
               </div>
-              <div className="w-11 h-11 bg-blue-50 dark:bg-blue-900/30 rounded-xl flex items-center justify-center">
-                <svg className="h-6 w-6 text-accent" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+              <div className="w-11 h-11 bg-purple-500/15 rounded-xl flex items-center justify-center">
+                <svg className="h-6 w-6 text-purple-400" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" />
                 </svg>
               </div>
             </div>
             <div className="flex items-center gap-2 mt-3">
               <span className="text-xs text-gray-500 dark:text-gray-400">Across {activeBoards} welfare boards</span>
-              <span className="text-[10px] font-medium text-accent bg-blue-50 dark:bg-blue-900/30 px-2 py-0.5 rounded-full">{stats.total_family_members} family members</span>
+              <span className="text-[10px] font-medium text-purple-300 bg-purple-500/15 px-2 py-0.5 rounded-full">{stats.total_family_members} family members</span>
             </div>
           </div>
 
           {/* Renewals Due Soon */}
-          <div onClick={() => navigate('/renewals')} className="bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700 shadow-sm p-5 flex flex-col justify-between min-h-[140px] transition-all duration-200 hover:shadow-md hover:-translate-y-0.5 cursor-pointer">
+          <div onClick={() => navigate('/renewals')} className="bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700 shadow-sm p-5 flex flex-col justify-between min-h-[140px] transition-all duration-200 hover:shadow-md hover:shadow-purple-500/5 hover:-translate-y-0.5 cursor-pointer">
             <div className="flex items-start justify-between">
               <div>
                 <p className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Renewals Due Soon</p>
@@ -90,7 +68,7 @@ export default function Dashboard() {
           </div>
 
           {/* Potential Benefits */}
-          <div onClick={() => navigate('/eligibility')} className="bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700 shadow-sm p-5 flex flex-col justify-between min-h-[140px] transition-all duration-200 hover:shadow-md hover:-translate-y-0.5 cursor-pointer">
+          <div onClick={() => navigate('/eligibility')} className="bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700 shadow-sm p-5 flex flex-col justify-between min-h-[140px] transition-all duration-200 hover:shadow-md hover:shadow-purple-500/5 hover:-translate-y-0.5 cursor-pointer">
             <div className="flex items-start justify-between">
               <div>
                 <p className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Potential Benefits</p>
@@ -109,7 +87,7 @@ export default function Dashboard() {
           </div>
 
           {/* Pending Reviews */}
-          <div onClick={() => navigate('/workers')} className="bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700 shadow-sm p-5 flex flex-col justify-between min-h-[140px] transition-all duration-200 hover:shadow-md hover:-translate-y-0.5 cursor-pointer">
+          <div onClick={() => navigate('/workers')} className="bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700 shadow-sm p-5 flex flex-col justify-between min-h-[140px] transition-all duration-200 hover:shadow-md hover:shadow-purple-500/5 hover:-translate-y-0.5 cursor-pointer">
             <div className="flex items-start justify-between">
               <div>
                 <p className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Pending Reviews</p>
@@ -133,7 +111,7 @@ export default function Dashboard() {
         {/* Stat Cards Row 2 — Schemes & Benefits */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
           {/* Total Schemes */}
-          <div onClick={() => navigate('/schemes')} className="bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700 shadow-sm p-5 flex flex-col justify-between min-h-[100px] transition-all duration-200 hover:shadow-md hover:-translate-y-0.5 cursor-pointer">
+          <div onClick={() => navigate('/schemes')} className="bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700 shadow-sm p-5 flex flex-col justify-between min-h-[100px] transition-all duration-200 hover:shadow-md hover:shadow-purple-500/5 hover:-translate-y-0.5 cursor-pointer">
             <div className="flex items-start justify-between">
               <div>
                 <p className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Total Schemes</p>
@@ -148,7 +126,7 @@ export default function Dashboard() {
           </div>
 
           {/* Active Schemes */}
-          <div onClick={() => navigate('/schemes')} className="bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700 shadow-sm p-5 flex flex-col justify-between min-h-[100px] transition-all duration-200 hover:shadow-md hover:-translate-y-0.5 cursor-pointer">
+          <div onClick={() => navigate('/schemes')} className="bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700 shadow-sm p-5 flex flex-col justify-between min-h-[100px] transition-all duration-200 hover:shadow-md hover:shadow-purple-500/5 hover:-translate-y-0.5 cursor-pointer">
             <div className="flex items-start justify-between">
               <div>
                 <p className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Active Schemes</p>
@@ -163,7 +141,7 @@ export default function Dashboard() {
           </div>
 
           {/* Available Benefits */}
-          <div onClick={() => navigate('/schemes')} className="bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700 shadow-sm p-5 flex flex-col justify-between min-h-[100px] transition-all duration-200 hover:shadow-md hover:-translate-y-0.5 cursor-pointer">
+          <div onClick={() => navigate('/schemes')} className="bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700 shadow-sm p-5 flex flex-col justify-between min-h-[100px] transition-all duration-200 hover:shadow-md hover:shadow-purple-500/5 hover:-translate-y-0.5 cursor-pointer">
             <div className="flex items-start justify-between">
               <div>
                 <p className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Available Benefits</p>
@@ -178,7 +156,7 @@ export default function Dashboard() {
           </div>
 
           {/* Potential Benefits */}
-          <div onClick={() => navigate('/eligibility')} className="bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700 shadow-sm p-5 flex flex-col justify-between min-h-[100px] transition-all duration-200 hover:shadow-md hover:-translate-y-0.5 cursor-pointer">
+          <div onClick={() => navigate('/eligibility')} className="bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700 shadow-sm p-5 flex flex-col justify-between min-h-[100px] transition-all duration-200 hover:shadow-md hover:shadow-purple-500/5 hover:-translate-y-0.5 cursor-pointer">
             <div className="flex items-start justify-between">
               <div>
                 <p className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Potential Benefits</p>
@@ -242,7 +220,7 @@ export default function Dashboard() {
                   <p className="text-xs text-gray-500 dark:text-gray-400">Registration expiration timeline</p>
                 </div>
               </div>
-              <button onClick={() => navigate('/renewals')} className="text-xs font-medium text-accent hover:text-accent-hover">View All →</button>
+              <button onClick={() => navigate('/renewals')} className="text-xs font-medium text-purple-400 hover:text-purple-300">View All →</button>
             </div>
             <div className="p-5 space-y-3">
               <RenewalRow label="Overdue / Expired" description="Immediate attention required" count={stats.overdue_registrations} color="red" />
@@ -260,7 +238,7 @@ export default function Dashboard() {
                   </div>
                   <div className="flex items-center gap-2">
                     <span className="text-lg font-bold text-orange-600 dark:text-orange-400">{stats.alert_counts.total}</span>
-                    <button onClick={() => navigate('/notifications')} className="text-[11px] font-medium text-accent hover:underline">View</button>
+                    <button onClick={() => navigate('/notifications')} className="text-[11px] font-medium text-purple-400 hover:text-purple-300 hover:underline">View</button>
                   </div>
                 </div>
               )}
@@ -287,7 +265,7 @@ export default function Dashboard() {
                 stats.upcoming_renewals.slice(0, 5).map((r: any, idx: number) => (
                   <div key={idx} className="flex items-center justify-between p-3 bg-gray-50 dark:bg-slate-700/50 rounded-lg transition-all duration-200 hover:bg-gray-100 dark:hover:bg-slate-600/50 hover:shadow-sm">
                     <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-full bg-accent/10 flex items-center justify-center text-accent font-semibold text-xs">
+                      <div className="w-8 h-8 rounded-full bg-purple-500/15 flex items-center justify-center text-purple-300 font-semibold text-xs">
                         {getInitials(r.full_name)}
                       </div>
                       <div>
@@ -312,8 +290,8 @@ export default function Dashboard() {
           <div className="bg-white dark:bg-slate-800 rounded-xl border border-gray-200 dark:border-slate-700 shadow-sm">
             <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100 dark:border-slate-700">
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 bg-accent/10 rounded-lg flex items-center justify-center">
-                  <svg className="h-4 w-4 text-accent" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+                <div className="w-8 h-8 bg-purple-500/15 rounded-lg flex items-center justify-center">
+                  <svg className="h-4 w-4 text-purple-400" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
                   </svg>
                 </div>
@@ -322,7 +300,7 @@ export default function Dashboard() {
                   <p className="text-xs text-gray-500 dark:text-gray-400">Welfare benefit cases in progress</p>
                 </div>
               </div>
-              <button onClick={() => navigate('/cases')} className="text-xs font-medium text-accent hover:text-accent-hover">View Cases →</button>
+              <button onClick={() => navigate('/cases')} className="text-xs font-medium text-purple-400 hover:text-purple-300">View Cases →</button>
             </div>
             <div className="p-5 grid grid-cols-2 md:grid-cols-5 gap-3">
               <div className="text-center p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
@@ -362,14 +340,14 @@ export default function Dashboard() {
               {stats.board_distribution?.filter(b => b.worker_count > 0).map((board, idx) => {
                 const maxCount = Math.max(...(stats.board_distribution?.map(b => b.worker_count) || [1]));
                 const width = Math.max((board.worker_count / maxCount) * 100, 5);
-                const colors = ['bg-accent', 'bg-emerald-500', 'bg-purple-500', 'bg-amber-500', 'bg-rose-500'];
+                const colors = ['bg-purple-500/70', 'bg-emerald-500/70', 'bg-violet-500/70', 'bg-amber-500/70', 'bg-rose-500/70'];
                 return (
                   <div key={idx}>
                     <div className="flex justify-between text-sm mb-1">
                       <span className="text-gray-700 dark:text-gray-300">{board.name.replace('Tamil Nadu ', 'TN ')}</span>
                       <span className="font-semibold text-gray-900 dark:text-white">{board.worker_count}</span>
                     </div>
-                    <div className="w-full bg-gray-100 dark:bg-slate-700 rounded-full h-2">
+                    <div className="w-full bg-white/[0.06] rounded-full h-2">
                       <div className={`${colors[idx % colors.length]} h-2 rounded-full transition-all`} style={{ width: `${width}%` }} />
                     </div>
                   </div>
@@ -420,7 +398,7 @@ export default function Dashboard() {
                   <tr key={w.id} className="hover:bg-gray-50/50 dark:hover:bg-slate-700/30 transition-colors">
                     <td className="px-5 py-3">
                       <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-full bg-accent/10 flex items-center justify-center text-accent font-semibold text-xs">
+                        <div className="w-8 h-8 rounded-full bg-purple-500/15 flex items-center justify-center text-purple-300 font-semibold text-xs">
                           {getInitials(w.full_name)}
                         </div>
                         <span className="text-sm font-medium text-gray-900 dark:text-white">{w.full_name}</span>

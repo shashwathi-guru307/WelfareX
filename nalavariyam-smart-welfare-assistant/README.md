@@ -116,6 +116,8 @@ python .freebuff/launch_servers.py
 
 **Credentials are managed via environment variables or the database. Never commit passwords to source control.**
 
+> ⚠️ **Security**: The `.env.example` file contains placeholder values only. Replace all `CHANGE_ME` values with strong, unique passwords before deploying.
+
 ---
 
 ## Environment Variables
@@ -130,6 +132,12 @@ python .freebuff/launch_servers.py
 | `FRONTEND_URL` | No | `http://localhost:5173` | CORS allowed origin |
 | `DOCUMENT_STORAGE_PATH` | No | `../uploads/case_documents` | Document upload directory |
 | `VITE_API_URL` | No | `/api` | Frontend API base URL |
+
+---
+
+## Demo / Seed Data
+
+The database seed data (`database/seed/`) contains **fictional demo records** — all worker names, phone numbers, addresses, and family information are entirely fabricated for demonstration purposes. No real personal information is included.
 
 ---
 
@@ -266,7 +274,7 @@ All endpoints require authentication except `/api/health` and `/api/auth/login`.
 - ✅ Document access requires authentication
 - ✅ File upload validation (type + size)
 - ✅ Security headers (CSP, X-Frame-Options, etc.)
-- ✅ No secrets in source code
+- ✅ No secrets in source code (credentials use environment variables)
 - ✅ `.env` excluded from Git
 - ✅ `DEBUG=False` in production
 - ✅ robots.txt prevents indexing

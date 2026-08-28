@@ -1,0 +1,65 @@
+# Environment / secrets
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+env/
+
+# Node / React
+node_modules/
+dist/
+build/
+.vite/
+
+# Database - NEVER PUSH
+*.db
+*.sqlite
+*.sqlite3
+*.db-wal
+*.db-shm
+*.db-journal
+
+# Database backups
+*_backup*.db
+*_backup*.sqlite
+*_backup*.sqlite3
+*.bak
+
+# Applicant documents / private uploads
+uploads/
+backend/uploads/
+nalavariyam-smart-welfare-assistant/uploads/
+nalavariyam-smart-welfare-assistant/backend/uploads/
+
+# Logs
+*.log
+logs/
+
+# AI tool files
+.freebuff/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.temp
+
+# Credentials / secrets
+credentials/
+secrets/
+*.pem
+*.key
+*.crt
+credentials.json
+token.json

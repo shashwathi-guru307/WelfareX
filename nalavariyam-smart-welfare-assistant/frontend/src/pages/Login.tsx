@@ -2,6 +2,7 @@ import { useState } from 'react';
 import type { FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
+import LightPillar from '../components/common/LightPillar';
 
 export default function Login() {
   const { login } = useAuth();
@@ -29,63 +30,22 @@ export default function Login() {
 
   return (
     <div className="min-h-screen flex items-center justify-center relative overflow-hidden">
-      {/* ── Animated Earth Background ── */}
-      <div className="absolute inset-0">
-        {/* Base dark fill */}
-        <div className="absolute inset-0 bg-[#050a18]" />
-        {/* The Earth image with slow Ken Burns drift animation */}
-        <img
-          src="/earth-bg.jpg"
-          alt=""
-          className="absolute inset-0 w-full h-full object-cover object-center"
-          style={{ animation: 'earth-drift 30s ease-in-out infinite', opacity: 0.9 }}
+      {/* ── Animated LightPillar Background ── */}
+      <div className="absolute inset-0 bg-[#081215]">
+        <LightPillar
+          topColor="#3B1F8E"
+          bottomColor="#1a1040"
+          intensity={1.0}
+          rotationSpeed={0.2}
+          glowAmount={0.006}
+          pillarWidth={3.5}
+          pillarHeight={0.35}
+          noiseIntensity={0.25}
+          mixBlendMode="screen"
+          quality="medium"
         />
-        {/* Radial vignette to keep card readable */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#050a18]/70 via-transparent to-[#050a18]/60" />
-        {/* Atmospheric horizon glow */}
-        <div className="absolute bottom-0 left-0 right-0 h-[50%] bg-gradient-to-t from-[#040b1a]/95 via-[#071830]/40 to-transparent" />
-        {/* Top fade for depth */}
-        <div className="absolute top-0 left-0 right-0 h-[25%] bg-gradient-to-b from-[#050a18]/80 to-transparent" />
-        {/* Pulsing blue glow at the Earth's limb */}
-        <div
-          className="absolute bottom-[18%] left-1/2 -translate-x-1/2 w-[80%] h-[20%] rounded-full bg-blue-500/10 blur-3xl"
-          style={{ animation: 'earth-glow-pulse 6s ease-in-out infinite' }}
-        />
-      </div>
-
-      {/* ── Starfield Overlay ── */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {/* Twinkling stars */}
-        {Array.from({ length: 80 }).map((_, i) => (
-          <div
-            key={i}
-            className="absolute rounded-full bg-white"
-            style={{
-              width: `${Math.random() * 2 + 0.5}px`,
-              height: `${Math.random() * 2 + 0.5}px`,
-              top: `${Math.random() * 60}%`,
-              left: `${Math.random() * 100}%`,
-              opacity: Math.random() * 0.5 + 0.1,
-              animation: `twinkle ${2 + Math.random() * 4}s ease-in-out infinite`,
-              animationDelay: `${Math.random() * 5}s`,
-            }}
-          />
-        ))}
-
-        {/* Floating light particles rising slowly */}
-        {Array.from({ length: 6 }).map((_, i) => (
-          <div
-            key={`p-${i}`}
-            className="absolute bottom-0 rounded-full bg-blue-300/20"
-            style={{
-              width: `${2 + Math.random() * 3}px`,
-              height: `${2 + Math.random() * 3}px`,
-              left: `${10 + Math.random() * 80}%`,
-              animation: `float-up ${15 + Math.random() * 20}s linear infinite`,
-              animationDelay: `${Math.random() * 10}s`,
-            }}
-          />
-        ))}
+        {/* Vignette to keep card readable */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#081215]/40 via-transparent to-[#081215]/60" />
       </div>
 
       {/* ── Glassmorphism Card ── */}

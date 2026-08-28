@@ -74,8 +74,8 @@ button:active:not(:disabled) {
   transform: translateY(0px) scale(0.98);
   box-shadow: none;
 }
-dark button:hover:not(:disabled) {
-  box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+.dark button:hover:not(:disabled) {
+  box-shadow: 0 4px 20px rgba(139, 92, 246, 0.15);
 }
 
 @keyframes pulse-dot { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
@@ -112,15 +112,15 @@ dark button:hover:not(:disabled) {
 /* --- Page + body --- */
 .dark { color-scheme: dark; }
 .dark body { background-color: #081215; color: #e2e8f0; }
-.dark #root > div { background-color: #081215 !important; }
+.dark #root, .dark #root > div { background-color: #081215 !important; }
 
 /* --- Cards / white surfaces --- */
-.dark .bg-white { background-color: #0f2328 !important; }
-.dark .bg-white.border { border-color: #1a3a40 !important; }
+.dark .bg-white { background-color: rgba(26, 16, 64, 0.25) !important; backdrop-filter: blur(12px); border-color: rgba(255,255,255,0.06) !important; }
+.dark .bg-white.border { border-color: rgba(139, 92, 246, 0.15) !important; }
 
 /* --- Gray tinted surfaces --- */
-.dark .bg-gray-50 { background-color: #0a1a1e !important; }
-.dark .bg-gray-50\/50 { background-color: rgba(10, 26, 30, 0.5) !important; }
+.dark .bg-gray-50 { background-color: rgba(26, 16, 64, 0.15) !important; }
+.dark .bg-gray-50\/50 { background-color: rgba(26, 16, 64, 0.1) !important; }
 
 /* --- Text --- */
 .dark .text-gray-900 { color: #f0fdfa !important; }
@@ -132,10 +132,10 @@ dark button:hover:not(:disabled) {
 .dark .text-gray-300 { color: #334155 !important; }
 
 /* --- Borders --- */
-.dark .border-gray-200 { border-color: #1a3a40 !important; }
-.dark .border-gray-100 { border-color: #0f2328 !important; }
-.dark .divide-gray-100 > :not([hidden]) ~ :not([hidden]) { border-color: #0f2328 !important; }
-.dark .divide-gray-50 > :not([hidden]) ~ :not([hidden]) { border-color: rgba(15, 35, 40, 0.6) !important; }
+.dark .border-gray-200 { border-color: rgba(255,255,255,0.07) !important; }
+.dark .border-gray-100 { border-color: rgba(255,255,255,0.05) !important; }
+.dark .divide-gray-100 > :not([hidden]) ~ :not([hidden]) { border-color: rgba(255,255,255,0.05) !important; }
+.dark .divide-gray-50 > :not([hidden]) ~ :not([hidden]) { border-color: rgba(255,255,255,0.04) !important; }
 
 /* --- Inputs --- */
 .dark input[type="text"],
@@ -163,20 +163,20 @@ dark button:hover:not(:disabled) {
 }
 
 /* --- Sidebar --- */
-.dark .bg-sidebar { background-color: #060e10 !important; }
+.dark .bg-sidebar { background-color: rgba(26, 16, 64, 0.4) !important; backdrop-filter: blur(24px); }
 
 /* --- Header --- */
-.dark header { background-color: #0f2328 !important; border-color: #1a3a40 !important; }
+.dark header { background-color: rgba(15, 10, 42, 0.5) !important; border-color: rgba(255,255,255,0.07) !important; backdrop-filter: blur(20px); }
 
 /* --- Tables --- */
-.dark table thead { background-color: rgba(6, 14, 16, 0.6) !important; }
-.dark table thead tr { border-color: #1a3a40 !important; }
-.dark table th { color: #64748b !important; }
-.dark table tbody tr:hover { background-color: rgba(15, 35, 40, 0.4) !important; }
-.dark td, .dark th { border-color: #0f2328 !important; }
+.dark table thead { background-color: rgba(26, 16, 64, 0.2) !important; }
+.dark table thead tr { border-color: rgba(255,255,255,0.06) !important; }
+.dark table th { color: rgba(255,255,255,0.4) !important; }
+.dark table tbody tr:hover { background-color: rgba(139, 92, 246, 0.06) !important; }
+.dark td, .dark th { border-color: rgba(255,255,255,0.05) !important; }
 
-/* --- Star border inner --- */
-.dark .inner-content { background: #0f2328 !important; color: #e2e8f0 !important; }
+/* --- Inner content --- */
+.dark .inner-content { background: rgba(26, 16, 64, 0.2) !important; color: #e2e8f0 !important; }
 
 /* --- Colored badge backgrounds (keep visible in dark) --- */
 .dark .bg-blue-50 { background-color: rgba(8, 145, 178, 0.12) !important; }
@@ -192,12 +192,26 @@ dark button:hover:not(:disabled) {
 .dark .bg-emerald-50.border { background-color: rgba(5, 150, 105, 0.06) !important; border-color: rgba(5, 150, 105, 0.2) !important; }
 .dark .bg-amber-50.border { background-color: rgba(217, 119, 6, 0.06) !important; border-color: rgba(217, 119, 6, 0.2) !important; }
 
-/* --- Buttons --- */
-.dark button.bg-white { background-color: #0f2328 !important; border-color: #1a3a40 !important; }
+/* --- Slate card surfaces (Dashboard, etc.) --- */
+.dark .bg-slate-800 { background-color: rgba(26, 16, 64, 0.25) !important; backdrop-filter: blur(12px); border-color: rgba(139, 92, 246, 0.1) !important; }
+.dark .bg-slate-700 { background-color: rgba(26, 16, 64, 0.2) !important; }
+.dark .bg-slate-700\/50 { background-color: rgba(26, 16, 64, 0.15) !important; }
+.dark .bg-slate-600\/50 { background-color: rgba(26, 16, 64, 0.2) !important; }
+.dark .border-slate-700 { border-color: rgba(139, 92, 246, 0.1) !important; }
+.dark .border-slate-600 { border-color: rgba(255,255,255,0.08) !important; }
+.dark .hover\:bg-slate-700:hover { background-color: rgba(26, 16, 64, 0.3) !important; }
+.dark .hover\:bg-slate-600\/50:hover { background-color: rgba(26, 16, 64, 0.25) !important; }
+.dark .divide-slate-700\/50 > :not([hidden]) ~ :not([hidden]) { border-color: rgba(255,255,255,0.05) !important; }
+.dark .divide-slate-700 > :not([hidden]) ~ :not([hidden]) { border-color: rgba(255,255,255,0.06) !important; }
 
-/* --- Star border animation tweak --- */
-.dark .border-gradient-bottom,
-.dark .border-gradient-top { opacity: 0.4; }
+/* --- Buttons --- */
+.dark button.bg-white { background-color: rgba(26, 16, 64, 0.3) !important; border-color: rgba(255,255,255,0.08) !important; }
+.dark button.bg-accent { background-color: rgba(139, 92, 246, 0.7) !important; box-shadow: 0 2px 10px rgba(139, 92, 246, 0.2); }
+
+/* --- Accent buttons (purple glow) --- */
+.dark .bg-accent { background-color: rgba(139, 92, 246, 0.6) !important; }
+.dark .bg-accent:hover { background-color: rgba(139, 92, 246, 0.8) !important; }
+.dark .bg-accent.text-white { text-shadow: 0 0 12px rgba(139, 92, 246, 0.4); }
 
 /* --- Sidebar footer --- */
 .dark .border-t { border-color: rgba(255,255,255,0.06) !important; }

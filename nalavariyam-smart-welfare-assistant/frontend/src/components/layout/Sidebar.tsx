@@ -1,5 +1,4 @@
 import { NavLink } from 'react-router-dom';
-import { useTheme } from '../../hooks/useTheme';
 import { useAuth } from '../../hooks/useAuth';
 
 const navItems = [
@@ -98,38 +97,21 @@ const navItems = [
 ];
 
 export default function Sidebar() {
-  const { theme, toggleTheme } = useTheme();
   const { logout } = useAuth();
 
   return (
-    <div className="fixed inset-y-0 left-0 w-60 bg-sidebar text-white flex flex-col shadow-xl z-30">
-      {/* Logo / Brand + Theme Toggle */}
-      <div className="flex items-center gap-3 px-5 py-5 border-b border-white/10">
-        <div className="w-10 h-10 bg-accent rounded-xl flex items-center justify-center shadow-lg">
+    <div className="fixed inset-y-0 left-0 w-60 bg-[#1a1040]/50 backdrop-blur-2xl text-white flex flex-col shadow-2xl shadow-purple-900/20 z-30 border-r border-white/[0.07]">
+      {/* Logo / Brand */}
+      <div className="flex items-center gap-3 px-5 py-5 border-b border-white/[0.08]">
+        <div className="w-10 h-10 bg-purple-600/80 rounded-xl flex items-center justify-center shadow-lg shadow-purple-500/20">
           <svg className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
           </svg>
         </div>
-        <div className="flex-1">
+        <div>
           <h1 className="text-sm font-bold leading-tight tracking-wide">Nalavariyam</h1>
-          <p className="text-[11px] text-white/50 leading-tight">Smart Welfare Assistant</p>
+          <p className="text-[11px] text-white/40 leading-tight">Smart Welfare Assistant</p>
         </div>
-        {/* Dark/Light Mode Toggle */}
-        <button
-          onClick={toggleTheme}
-          className="flex-shrink-0 w-9 h-9 flex items-center justify-center rounded-lg bg-white/10 hover:bg-white/20 transition-all duration-200 group"
-          title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
-        >
-          {theme === 'dark' ? (
-            <svg className="h-4.5 w-4.5 text-yellow-300 group-hover:rotate-45 transition-transform duration-300" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" />
-            </svg>
-          ) : (
-            <svg className="h-4.5 w-4.5 text-blue-200 group-hover:-rotate-12 transition-transform duration-300" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z" />
-            </svg>
-          )}
-        </button>
       </div>
 
       {/* Navigation */}
@@ -142,15 +124,15 @@ export default function Sidebar() {
             className={({ isActive }) =>
               `flex items-center gap-3 px-3 py-2.5 rounded-lg text-[13px] font-medium transition-all duration-150 ${
                 isActive
-                  ? 'bg-accent text-white shadow-md shadow-accent/30'
-                  : 'text-white/60 hover:bg-white/8 hover:text-white/90'
+                  ? 'bg-purple-500/25 text-white shadow-md shadow-purple-500/15 border border-purple-400/20'
+                  : 'text-white/50 hover:bg-white/[0.06] hover:text-white/85'
               }`
             }
           >
             {item.icon}
             <span className="flex-1">{item.label}</span>
             {item.badge && (
-              <span className="text-[10px] font-bold bg-accent/60 text-white/90 px-1.5 py-0.5 rounded">
+              <span className="text-[10px] font-bold bg-purple-500/30 text-purple-200 px-1.5 py-0.5 rounded">
                 {item.badge}
               </span>
             )}
@@ -162,7 +144,7 @@ export default function Sidebar() {
       <div className="px-3 pb-2">
         <button
           onClick={logout}
-          className="flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-[13px] font-medium text-white/60 hover:bg-red-500/15 hover:text-red-400 transition-all duration-150"
+          className="flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-[13px] font-medium text-white/40 hover:bg-red-500/12 hover:text-red-400 transition-all duration-150"
         >
           <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
@@ -172,10 +154,10 @@ export default function Sidebar() {
       </div>
 
       {/* Footer Disclaimer */}
-      <div className="px-4 py-4 border-t border-white/10">
-        <p className="text-xs font-semibold text-white/70">Nalavariyam Smart Welfare Assistant</p>
-        <p className="text-[10px] font-bold text-emerald mt-0.5">Internal Prototype</p>
-        <p className="text-[9px] text-white/30 mt-1 leading-tight">
+      <div className="px-4 py-4 border-t border-white/[0.06]">
+        <p className="text-xs font-semibold text-white/50">Nalavariyam Smart Welfare Assistant</p>
+        <p className="text-[10px] font-bold text-purple-300/70 mt-0.5">Internal Prototype</p>
+        <p className="text-[9px] text-white/20 mt-1 leading-tight">
           For authorized administrative staff review. Non-statutory demo engine.
         </p>
       </div>

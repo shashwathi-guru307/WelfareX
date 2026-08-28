@@ -4,12 +4,17 @@ Creates the two authorized accounts for the Nalavariyam Smart Welfare Assistant.
 
 Usage:
     python init_users.py
-    python init_users.py --admin-email admin@example.com --admin-password secret123
-    python init_users.py --staff-email staff@example.com --staff-password secret456
+    python init_users.py --admin-email admin@yourdomain.com --admin-password YOUR_PASSWORD
+    python init_users.py --staff-email staff@yourdomain.com --staff-password YOUR_PASSWORD
 
 Environment Variables (alternative to CLI args):
-    ADMIN_EMAIL, ADMIN_PASSWORD, ADMIN_NAME
-    STAFF_EMAIL, STAFF_PASSWORD, STAFF_NAME
+    ADMIN_EMAIL, ADMIN_PASSWORD, ADMIN_USERNAME, ADMIN_NAME
+    STAFF_EMAIL, STAFF_PASSWORD, STAFF_USERNAME, STAFF_NAME
+
+IMPORTANT:
+    ADMIN_PASSWORD and STAFF_PASSWORD are REQUIRED.
+    The script will fail with a clear error if they are not provided
+    via environment variables or CLI arguments.
 """
 
 import os
@@ -28,16 +33,36 @@ DATABASE_PATH = os.environ.get(
 
 
 def init_users(
-    admin_email: str = "rselva1204@gmail.com",
-    admin_password: str = "selva1204",
+    admin_email: str = "admin@example.com",
+    admin_password: str | None = None,
     admin_name: str = "Administrator",
-    admin_username: str = "rselva1204",
-    staff_email: str = "thorfinn@example.com",
-    staff_password: str = "thorfinn1204",
+    admin_username: str = "admin",
+    staff_email: str = "staff@example.com",
+    staff_password: str | None = None,
     staff_name: str = "Staff User",
-    staff_username: str = "thorfinn",
+    staff_username: str = "staff",
 ):
-    """Initialize or update the two authorized user accounts."""
+    """Initialize or update the two authorized user accounts.
+
+    Raises:
+        SystemExit: If admin_password or staff_password is not provided.
+    """
+    if not admin_password:
+        print(
+            "ERROR: ADMIN_PASSWORD is required. "
+            "Set it via the ADMIN_PASSWORD environment variable "
+            "or the --admin-password CLI argument."
+        )
+        sys.exit(1)
+
+    if not staff_password:
+        print(
+            "ERROR: STAFF_PASSWORD is required. "
+            "Set it via the STAFF_PASSWORD environment variable "
+            "or the --staff-password CLI argument."
+        )
+        sys.exit(1)
+
     conn = sqlite3.connect(DATABASE_PATH)
     conn.execute("PRAGMA foreign_keys = ON")
 
@@ -112,15 +137,16 @@ def init_users(
 if __name__ == "__main__":
     # Parse CLI args or use env vars
     import argparse
+
     parser = argparse.ArgumentParser(description="Initialize authorized user accounts")
-    parser.add_argument("--admin-email", default=os.environ.get("ADMIN_EMAIL", "rselva1204@gmail.com"))
-    parser.add_argument("--admin-password", default=os.environ.get("ADMIN_PASSWORD", "selva1204"))
+    parser.add_argument("--admin-email", default=os.environ.get("ADMIN_EMAIL", "admin@example.com"))
+    parser.add_argument("--admin-password", default=os.environ.get("ADMIN_PASSWORD"))
     parser.add_argument("--admin-name", default=os.environ.get("ADMIN_NAME", "Administrator"))
-    parser.add_argument("--admin-username", default=os.environ.get("ADMIN_USERNAME", "rselva1204"))
-    parser.add_argument("--staff-email", default=os.environ.get("STAFF_EMAIL", "thorfinn@example.com"))
-    parser.add_argument("--staff-password", default=os.environ.get("STAFF_PASSWORD", "thorfinn1204"))
+    parser.add_argument("--admin-username", default=os.environ.get("ADMIN_USERNAME", "admin"))
+    parser.add_argument("--staff-email", default=os.environ.get("STAFF_EMAIL", "staff@example.com"))
+    parser.add_argument("--staff-password", default=os.environ.get("STAFF_PASSWORD"))
     parser.add_argument("--staff-name", default=os.environ.get("STAFF_NAME", "Staff User"))
-    parser.add_argument("--staff-username", default=os.environ.get("STAFF_USERNAME", "thorfinn"))
+    parser.add_argument("--staff-username", default=os.environ.get("STAFF_USERNAME", "staff"))
     args = parser.parse_args()
 
     init_users(

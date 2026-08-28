@@ -11,8 +11,8 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const [theme, setTheme] = useState<Theme>(() => {
-    const stored = localStorage.getItem('nalavariyam-theme');
-    return (stored === 'dark' || stored === 'light') ? stored : 'light';
+    // Always default to dark mode
+    return 'dark';
   });
 
   useEffect(() => {

@@ -24,9 +24,14 @@ def test(name, passed, detail=''):
     d = f' -- {detail}' if detail else ''
     print(f'  [{status}] {name}{d}')
 
+ADMIN_EMAIL = os.environ.get('ADMIN_EMAIL', 'admin@example.com')
+ADMIN_PASSWORD = os.environ.get('ADMIN_PASSWORD', 'CHANGE_ME')
+STAFF_EMAIL = os.environ.get('STAFF_EMAIL', 'staff@example.com')
+STAFF_PASSWORD = os.environ.get('STAFF_PASSWORD', 'CHANGE_ME')
+
 def get_token(client):
     """Login as admin and return token from cookie."""
-    resp = client.post('/api/auth/login', json={'email': 'rselva1204@gmail.com', 'password': 'selva1204'})
+    resp = client.post('/api/auth/login', json={'email': ADMIN_EMAIL, 'password': ADMIN_PASSWORD})
     cookie = resp.headers.get('Set-Cookie', '')
     if 'nwsa_session=' in cookie:
         return cookie.split('nwsa_session=')[1].split(';')[0]
@@ -34,7 +39,7 @@ def get_token(client):
 
 def get_staff_token(client):
     """Login as staff and return token."""
-    resp = client.post('/api/auth/login', json={'email': 'thorfinn', 'password': 'thorfinn1204'})
+    resp = client.post('/api/auth/login', json={'email': STAFF_EMAIL, 'password': STAFF_PASSWORD})
     cookie = resp.headers.get('Set-Cookie', '')
     if 'nwsa_session=' in cookie:
         return cookie.split('nwsa_session=')[1].split(';')[0]
@@ -66,7 +71,7 @@ with app.test_client() as c:
     user = fetch_one('SELECT password_hash FROM users WHERE id = 1')
     test('Passwords hashed (pbkdf2)', user and user['password_hash'].startswith('pbkdf2:sha256'))
 
-    resp = c.post('/api/auth/login', json={'email': 'rselva1204@gmail.com', 'password': 'selva1204'})
+    resp = c.post('/api/auth/login', json={'email': ADMIN_EMAIL, 'password': ADMIN_PASSWORD})
     test('Admin login succeeds', resp.status_code == 200)
 
     resp = c.post('/api/auth/login', json={'email': 'admin', 'password': 'wrong'})
@@ -90,7 +95,7 @@ print('\n2. AUTHORIZATION')
 
 # Authenticated tests
 with app.test_client() as c:
-    resp = c.post('/api/auth/login', json={'email': 'thorfinn', 'password': 'thorfinn1204'})
+    resp = c.post('/api/auth/login', json={'email': STAFF_EMAIL, 'password': STAFF_PASSWORD})
     cookie_header = resp.headers.get('Set-Cookie', '')
     staff_token = None
     if 'nwsa_session=' in cookie_header:
@@ -119,7 +124,7 @@ with app.test_client() as c:
     resp = c.get('/api/health')
     test('Health endpoint public', resp.status_code == 200)
 
-    resp = c.post('/api/auth/login', json={'email': 'rselva1204@gmail.com', 'password': 'selva1204'})
+    resp = c.post('/api/auth/login', json={'email': ADMIN_EMAIL, 'password': ADMIN_PASSWORD})
     test('Login endpoint public', resp.status_code == 200)
 
 # ============================================================
@@ -127,7 +132,7 @@ with app.test_client() as c:
 # ============================================================
 print('\n3. SESSION SECURITY')
 with app.test_client() as c:
-    resp = c.post('/api/auth/login', json={'email': 'rselva1204@gmail.com', 'password': 'selva1204'})
+    resp = c.post('/api/auth/login', json={'email': ADMIN_EMAIL, 'password': ADMIN_PASSWORD})
     cookie = resp.headers.get('Set-Cookie', '')
     token = None
     if 'nwsa_session=' in cookie:
@@ -329,7 +334,7 @@ with app.test_client() as c:
 
         # Mismatched passwords
         resp = c.post('/api/auth/change-password', json={
-            'current_password': 'selva1204',
+            'current_password': ADMIN_PASSWORD,
             'new_password': 'newpass123',
             'confirm_password': 'different'
         }, headers={'Authorization': f'Bearer {token}'})
@@ -337,7 +342,7 @@ with app.test_client() as c:
 
         # Too short password
         resp = c.post('/api/auth/change-password', json={
-            'current_password': 'selva1204',
+            'current_password': ADMIN_PASSWORD,
             'new_password': 'ab',
             'confirm_password': 'ab'
         }, headers={'Authorization': f'Bearer {token}'})

@@ -105,12 +105,8 @@ def create_app() -> Flask:
     # --- Health Check Endpoint (public) ---
     @app.route("/api/health", methods=["GET"])
     def health_check():
-        db_info = get_database_info()
         return jsonify({
-            "status": "healthy",
-            "service": "Nalavariyam Smart Welfare Assistant API",
-            "version": "4.0.0",
-            "database": db_info["type"],
+            "status": "ok",
         })
 
     # --- Global before_request: require authentication for all /api/* ---
