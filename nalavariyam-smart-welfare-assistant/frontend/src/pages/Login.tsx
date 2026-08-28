@@ -13,18 +13,21 @@ export default function Login() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
+  const isValidEmail = (value: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setError('');
-    if (!email) { setError('Email or username is required'); return; }
-    if (!password) { setError('Password is required'); return; }
+    if (!email.trim()) { setError('Email address is required.'); return; }
+    if (!isValidEmail(email)) { setError('Please enter a valid email address.'); return; }
+    if (!password) { setError('Password is required.'); return; }
     setLoading(true);
-    const result = await login(email, password);
+    const result = await login(email.trim().toLowerCase(), password);
     setLoading(false);
     if (result.success) {
       navigate('/', { replace: true });
     } else {
-      setError(result.error || 'Invalid email/username or password.');
+      setError(result.error || 'Invalid email or password.');
     }
   };
 
@@ -78,7 +81,7 @@ export default function Login() {
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* Email / Username */}
             <div>
-              <label className="block text-xs font-medium text-white/50 mb-1.5 ml-0.5">Email or Username</label>
+              <label className="block text-xs font-medium text-white/50 mb-1.5 ml-0.5">Email Address</label>
               <div className="relative">
                 <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-white/30">
                   <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
@@ -86,12 +89,12 @@ export default function Login() {
                   </svg>
                 </span>
                 <input
-                  type="text"
+                  type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Enter your email or username"
-                  autoComplete="username"
-                  className="w-full pl-11 pr-4 py-3 text-sm bg-white/[0.06] border border-white/[0.1] rounded-xl text-white placeholder-white/25 focus:outline-none focus:ring-2 focus:ring-teal-400/30 focus:border-teal-400/30 transition-all"
+                  placeholder="Enter your email address"
+                  autoComplete="email"
+                  className="w-full pl-11 pr-4 py-3 text-sm bg-white/[0.06] border border-white/[0.1] rounded-xl text-white placeholder-white/25 focus:outline-none focus:ring-2 focus:ring-purple-400/30 focus:border-purple-400/30 transition-all"
                 />
               </div>
             </div>
@@ -111,7 +114,7 @@ export default function Login() {
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
                   autoComplete="current-password"
-                  className="w-full pl-11 pr-11 py-3 text-sm bg-white/[0.06] border border-white/[0.1] rounded-xl text-white placeholder-white/25 focus:outline-none focus:ring-2 focus:ring-teal-400/30 focus:border-teal-400/30 transition-all tracking-widest"
+                  className="w-full pl-11 pr-11 py-3 text-sm bg-white/[0.06] border border-white/[0.1] rounded-xl text-white placeholder-white/25 focus:outline-none focus:ring-2 focus:ring-purple-400/30 focus:border-purple-400/30 transition-all tracking-widest"
                 />
                 <button
                   type="button"
@@ -153,6 +156,9 @@ export default function Login() {
           {/* Footer disclaimer */}
           <p className="text-center text-xs text-white/20 mt-6">
             Authorized personnel only. All access is monitored.
+          </p>
+          <p className="text-center text-[10px] text-white/15 mt-2">
+            Data is associated with your registered email address.
           </p>
         </div>
       </div>

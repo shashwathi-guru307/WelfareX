@@ -298,6 +298,7 @@ def delete_profile_picture():
 
 
 @auth_bp.route("/api/auth/profile/picture/<filename>")
+@login_required
 def serve_profile_picture(filename):
     """Serve a profile picture."""
     from flask import send_from_directory
