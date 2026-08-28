@@ -1,0 +1,27 @@
+2026-08-27 23:04:00 [INFO] nwsa: Starting Nalavariyam API on port 5000 (debug=False)...
+2026-08-27 23:04:00 [INFO] werkzeug: [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.221.40:5000
+2026-08-27 23:04:00 [INFO] werkzeug: [33mPress CTRL+C to quit[0m
+2026-08-27 23:04:13 [INFO] werkzeug: 127.0.0.1 - - [27/Aug/2026 23:04:13] "[31m[1mGET /api/auth/me HTTP/1.1[0m" 401 -
+2026-08-27 23:04:13 [INFO] werkzeug: 127.0.0.1 - - [27/Aug/2026 23:04:13] "[31m[1mGET /api/auth/me HTTP/1.1[0m" 401 -
+2026-08-27 23:04:29 [INFO] werkzeug: 127.0.0.1 - - [27/Aug/2026 23:04:29] "[31m[1mGET /api/auth/me HTTP/1.1[0m" 401 -
+2026-08-27 23:04:29 [INFO] werkzeug: 127.0.0.1 - - [27/Aug/2026 23:04:29] "[31m[1mGET /api/auth/me HTTP/1.1[0m" 401 -
+2026-08-27 23:04:53 [INFO] werkzeug: 127.0.0.1 - - [27/Aug/2026 23:04:53] "[31m[1mGET /api/auth/me HTTP/1.1[0m" 401 -
+2026-08-27 23:04:53 [INFO] werkzeug: 127.0.0.1 - - [27/Aug/2026 23:04:53] "[31m[1mGET /api/auth/me HTTP/1.1[0m" 401 -
+2026-08-27 23:05:21 [INFO] werkzeug: 127.0.0.1 - - [27/Aug/2026 23:05:21] "POST /api/auth/login HTTP/1.1" 200 -
+2026-08-27 23:05:21 [INFO] werkzeug: 127.0.0.1 - - [27/Aug/2026 23:05:21] "GET /api/alerts/counts HTTP/1.1" 200 -
+2026-08-27 23:05:21 [INFO] werkzeug: 127.0.0.1 - - [27/Aug/2026 23:05:21] "GET /api/alerts/counts HTTP/1.1" 200 -
+2026-08-27 23:05:21 [INFO] werkzeug: 127.0.0.1 - - [27/Aug/2026 23:05:21] "GET /api/cases/statistics HTTP/1.1" 200 -
+2026-08-27 23:05:21 [INFO] werkzeug: 127.0.0.1 - - [27/Aug/2026 23:05:21] "GET /api/cases/statistics HTTP/1.1" 200 -
+2026-08-27 23:05:21 [INFO] werkzeug: 127.0.0.1 - - [27/Aug/2026 23:05:21] "GET /api/dashboard/stats HTTP/1.1" 200 -
+2026-08-27 23:05:21 [INFO] werkzeug: 127.0.0.1 - - [27/Aug/2026 23:05:21] "GET /api/dashboard/stats HTTP/1.1" 200 -
+2026-08-27 23:07:18 [INFO] werkzeug: 127.0.0.1 - - [27/Aug/2026 23:07:18] "GET /api/boards HTTP/1.1" 200 -
+2026-08-27 23:07:18 [INFO] werkzeug: 127.0.0.1 - - [27/Aug/2026 23:07:18] "GET /api/boards HTTP/1.1" 200 -
+2026-08-27 23:07:18 [INFO] werkzeug: 127.0.0.1 - - [27/Aug/2026 23:07:18] "GET /api/cases/statistics HTTP/1.1" 200 -
+2026-08-27 23:07:18 [INFO] werkzeug: 127.0.0.1 - - [27/Aug/2026 23:07:18] "GET /api/cases?page=1&per_page=15 HTTP/1.1" 200 -
+2026-08-27 23:07:18 [INFO] werkzeug: 127.0.0.1 - - [27/Aug/2026 23:07:18] "GET /api/cases/statistics HTTP/1.1" 200 -
+2026-08-27 23:07:18 [INFO] werkzeug: 127.0.0.1 - - [27/Aug/2026 23:07:18] "GET /api/cases?page=1&per_page=15 HTTP/1.1" 200 -
+2026-08-27 23:07:18 [INFO] werkzeug: 127.0.0.1 - - [27/Aug/2026 23:07:18] "GET /api/schemes HTTP/1.1" 200 -
+2026-08-27 23:07:19 [INFO] werkzeug: 127.0.0.1 - - [27/Aug/2026 23:07:19] "GET /api/schemes HTTP/1.1" 200 -

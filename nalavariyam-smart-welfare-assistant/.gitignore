@@ -1,0 +1,61 @@
+# Environment / Secrets
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+env/
+
+# Node / React
+node_modules/
+dist/
+build/
+.vite/
+
+# Database - NEVER PUSH
+*.db
+*.sqlite
+*.sqlite3
+*.db-wal
+*.db-shm
+*.db-journal
+
+# Database backups
+*_backup*.db
+*.bak
+
+# Uploaded applicant documents - NEVER PUSH
+uploads/
+backend/uploads/
+
+# Logs
+*.log
+logs/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.temp
+
+# Secrets / credentials
+credentials/
+secrets/
+*.pem
+*.key
+*.crt
+credentials.json
+token.json
+
+# Freebuff temporary files
+.freebuff/
