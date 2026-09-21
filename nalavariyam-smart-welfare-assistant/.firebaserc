@@ -1,0 +1,6 @@
+{
+  "projects": {
+    "default": "welfarex-assist",
+    "dev": "welfarex-assist-dev"
+  }
+}

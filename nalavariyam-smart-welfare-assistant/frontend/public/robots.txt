@@ -1,0 +1,9 @@
+# Nalavariyam Smart Welfare Assistant
+# This application contains private applicant information.
+# Disallow all crawling of the application.
+
+User-agent: *
+Disallow: /
+
+# All pages are private and login-protected
+# No public content to index

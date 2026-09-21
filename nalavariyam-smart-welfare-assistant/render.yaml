@@ -1,0 +1,63 @@
+# ============================================================
+# Nalavariyam Smart Welfare Assistant — Render Blueprint
+# ============================================================
+# Deploy all 3 services with: render blueprints apply
+# Or create services manually in Render Dashboard (see RENDER_DEPLOYMENT.md)
+# ============================================================
+
+services:
+  # ─────────────────────────────────────────────
+  # 1. Backend API (Flask + Gunicorn)
+  # ─────────────────────────────────────────────
+  - type: web
+    name: nwsa-backend
+    runtime: python
+    rootDir: backend
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn server:app --bind 0.0.0.0:$PORT --workers 2 --timeout 120
+    healthCheckPath: /api/health
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.11"
+      - key: FLASK_DEBUG
+        value: "0"
+      - key: LOG_LEVEL
+        value: "INFO"
+      - key: SECRET_KEY
+        generateValue: true
+      - key: FRONTEND_URL
+        sync: false  # Set manually after frontend is deployed
+        # value: https://nwsa-frontend.onrender.com
+      - key: DATABASE_URL
+        fromDatabase:
+          name: nwsa-database
+          property: connectionString
+      - key: DOCUMENT_STORAGE_PATH
+        value: "/tmp/uploads/case_documents"
+
+  # ─────────────────────────────────────────────
+  # 2. Frontend (React + Vite Static Site)
+  # ─────────────────────────────────────────────
+  - type: static_site
+    name: nwsa-frontend
+    rootDir: frontend
+    plan: free
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
+    routes:
+      - type: rewrite
+        source: /api/**
+        destination: https://nwsa-backend.onrender.com/api/**
+    envVars:
+      - key: VITE_API_URL
+        value: "/api"
+
+  # ─────────────────────────────────────────────
+  # 3. PostgreSQL Database
+  # ─────────────────────────────────────────────
+  - type: postgresql
+    name: nwsa-database
+    plan: free
+    databaseName: nalavariyam
+    ipAllowList: []  # Only accessible from other Render services
