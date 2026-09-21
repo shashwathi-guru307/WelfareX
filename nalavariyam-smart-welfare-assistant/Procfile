@@ -1,5 +1,0 @@
-# Nalavariyam Smart Welfare Assistant — Procfile
-# Used by deployment platforms (Render, Railway, Heroku, etc.)
-
-# Backend API server (Gunicorn for production)
-web: gunicorn server:app --bind 0.0.0.0:$PORT --workers 2 --timeout 120
