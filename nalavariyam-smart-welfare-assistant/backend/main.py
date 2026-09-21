@@ -8,6 +8,19 @@ Environment variables are provided via Firebase config instead of .env files.
 import os
 import sys
 
+from flask import Flask
+from flask_cors import CORS
+
+app = Flask(__name__)
+
+# Configure CORS to allow cross-origin requests and credentials from Firebase
+CORS(
+    app,
+    resources={r"/api/*": {"origins": ["https://welfarex-assist.web.app", "http://localhost:5173"]}},
+    supports_credentials=True,
+    expose_headers=["Authorization", "Content-Type"]
+)
+
 # ============================================================
 # Pre-load environment variables from Firebase config
 # ============================================================

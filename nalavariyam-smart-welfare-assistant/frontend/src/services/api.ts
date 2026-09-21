@@ -4,10 +4,25 @@
 
 import type { ApiResponse, DashboardStats, PaginatedResponse, Worker, WelfareBoard, WelfareScheme, SchemeCategory, SchemeBenefit, SchemeQualification, SchemeRule, EligibilityResult, FamilyMember, EducationRecord, EligibilityAnalysis, AuditLogEntry, AlertsResponse, AlertCounts, RenewalSummaryItem, RenewalBreakdown, WorkerRenewalDetail, RenewalConfig, RenewalHistory, RemindersResponse, ReminderSummary, Reminder, ActivityLog, ActivitySummary, NotificationPreferences, SettingsByCategory, SystemSetting, SystemStats, ReportStatistics, BoardStatistic, DistrictStatistic, Case, CasesResponse, CaseStatistics, CaseMetadata, CaseDocument, CaseTask, CaseNote, WorkQueue, DuplicateCheck, WorkerNote } from '../types';
 
-const API_BASE = import.meta.env.VITE_API_URL || '/api';
+// DYNAMIC BACKEND RESOLUTION:
+// 1. Prefers VITE_API_BASE_URL if set in .env
+// 2. Prefers VITE_API_URL if set in .env
+// 3. Fallback: Directly hits your hosted Render backend
+const BACKEND_HOST = import.meta.env.VITE_API_BASE_URL || import.meta.env.VITE_API_URL || "https://welfare-x.onrender.com";
+
+// Ensures request paths don't end up with double slashes or duplicate /api prefixes
+const API_BASE = BACKEND_HOST.replace(/\/+$/, '');
 
 async function request<T>(url: string, options?: RequestInit): Promise<T> {
-  const response = await fetch(`${API_BASE}${url}`, {
+  // Ensure the requested endpoint starts with a slash
+  const formattedUrl = url.startsWith('/') ? url : `/${url}`;
+  
+  // Appends /api if not already included in the base or path
+  const targetUrl = API_BASE.endsWith('/api') || formattedUrl.startsWith('/api') 
+    ? `${API_BASE}${formattedUrl}` 
+    : `${API_BASE}/api${formattedUrl}`;
+
+  const response = await fetch(targetUrl, {
     headers: {
       'Content-Type': 'application/json',
       ...options?.headers,
@@ -211,7 +226,9 @@ export interface SchemeListParams {
   category_id?: number;
   board_id?: number;
   search?: string;
-}export const schemesApi = {
+}
+
+export const schemesApi = {
   list: (params?: SchemeListParams) => {
     const searchParams = new URLSearchParams();
     if (params) {
@@ -369,7 +386,7 @@ export const renewalsApi = {
       });
     }
     const query = searchParams.toString();
-    return fetch(`/api/renewals/export${query ? `?${query}` : ''}`);
+    return fetch(`${API_BASE}/renewals/export${query ? `?${query}` : ''}`);
   },
 
   dailyCheck: () =>
@@ -535,7 +552,7 @@ export const reportsApi = {
   getDistrictStats: () => request<ApiResponse<DistrictStatistic[]>>('/reports/districts'),
 
   exportCsv: (type: 'applicants' | 'family' | 'schemes') => {
-    return fetch(`/api/reports/export/${type}`);
+    return fetch(`${API_BASE}/reports/export/${type}`);
   },
 };
 
@@ -641,7 +658,7 @@ export const casesApi = {
       });
     }
     const q = sp.toString();
-    return fetch(`/api/cases/export/csv${q ? `?${q}` : ''}`);
+    return fetch(`${API_BASE}/cases/export/csv${q ? `?${q}` : ''}`);
   },
 
   getExportData: (id: number) =>

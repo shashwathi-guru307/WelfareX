@@ -32,6 +32,7 @@ from app.routes.reports import reports_bp
 from app.routes.cases import cases_bp
 from app.routes.worker_notes import worker_notes_bp
 from app.database import get_database_info
+from app.db_init import ensure_schema
 
 # ============================================================
 # Logging Configuration
@@ -84,6 +85,16 @@ def create_app() -> Flask:
         resources={r"/api/*": {"origins": allowed_origins}},
         supports_credentials=True,
     )
+
+    # --- Automatic database initialization ---
+    # With DATABASE_URL set (Supabase/PostgreSQL): creates all tables + seeds
+    # baseline data idempotently on every boot. Never blocks startup on failure.
+    try:
+        if ensure_schema():
+            db_info = get_database_info()
+            logger.info(f"Database ready: {db_info['type']}")
+    except Exception as e:
+        logger.warning(f"Database auto-init skipped: {e}")
 
     # --- Register Blueprints ---
     app.register_blueprint(auth_bp)

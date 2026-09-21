@@ -2,26 +2,95 @@
 Database connection module for Nalavariyam Smart Welfare Assistant.
 
 Supports:
-  - SQLite (development) via built-in sqlite3
-  - PostgreSQL (production) via psycopg2
+  - PostgreSQL / Supabase (production) via psycopg2
+  - SQLite (development fallback) via built-in sqlite3
 
-Configure via environment variables:
-  DATABASE_URL  — postgres://... connection string (production)
-  DATABASE_PATH — local SQLite file path (development, default)
+Configure via environment variables (loaded from .env by python-dotenv
+in server.py / main.py):
+  DATABASE_URL  — postgres://... or postgresql://... connection string.
+                  If missing, falls back to local SQLite for offline dev.
+  DATABASE_PATH — local SQLite file path (fallback only, default).
 """
 
 import os
 import sqlite3
+from urllib.parse import urlsplit, urlunsplit, quote as _urlquote
 from contextlib import contextmanager
 from typing import Any, Optional
 
+import psycopg2
 import psycopg2.extras as psycopg2_st  # noqa: F401  (module ref for exception types)
 
 # ============================================================
 # Configuration
 # ============================================================
 
-DATABASE_URL = os.environ.get("DATABASE_URL", "")
+
+def normalize_database_url(raw_url: str) -> str:
+    """Normalize a DATABASE_URL so it always works with psycopg2.
+
+    Handles the common deployment pitfalls:
+      1. Scheme upgrade: "postgres://" → "postgresql://"
+         (older drivers/tools emit postgres://; psycopg2 and most
+         platforms expect postgresql://).
+      2. Supabase copy/paste leftovers: passwords wrapped in literal
+         brackets, e.g.  postgres://postgres:[YOUR-PASSWORD]@host/...
+         → strips the brackets.
+      3. Unencoded special characters in the password (like @ or /)
+         that break URL parsing → percent-encode the password properly.
+      4. Ensures sslmode is present for cloud providers when not set
+         (Supabase/Neon require SSL; local Postgres ignores it).
+    """
+    if not raw_url:
+        return raw_url
+
+    url = raw_url.strip()
+
+    # 1. postgres:// → postgresql://
+    if url.startswith("postgres://"):
+        url = "postgresql://" + url[len("postgres://"):]
+
+    if not url.startswith("postgresql://"):
+        return url  # not a postgres URL we can parse — pass through
+
+    # 2 & 3. Parse manually so we can fix the password safely.
+    #     postgresql://user:pass@host:port/db?params
+    try:
+        scheme, rest = url.split("://", 1)
+        netloc, _, query = rest.partition("?")
+    except ValueError:
+        return url
+
+    # Supabase template brackets: [YOUR-PASSWORD] → YOUR-PASSWORD
+    netloc = netloc.replace("[", "").replace("]", "")
+
+    userinfo, sep, hostport = netloc.rpartition("@")
+    if sep:
+        user, _, password = userinfo.partition(":")
+        if password and ("%" not in password):
+            # Password contains raw special chars → percent-encode.
+            # (If it's already encoded this would double-encode.)
+            if any(c in password for c in "@/:?#[]"):
+                password = _urlquote(password, safe="")
+        netloc = f"{user}:{password}@{hostport}" if password else user + "@" + hostport
+    else:
+        netloc = userinfo or hostport
+
+    url = f"{scheme}://{netloc}"
+    if query:
+        url += "?" + query
+
+    # 4. Default sslmode=require for cloud databases unless already set.
+    #    Supabase enforces SSL; local postgres just ignores the param.
+    if "sslmode" not in url:
+        is_local = any(h in url for h in ("localhost", "127.0.0.1", "::1"))
+        if not is_local:
+            url += ("&" if "?" in url else "?") + "sslmode=require"
+
+    return url
+
+
+DATABASE_URL = normalize_database_url(os.environ.get("DATABASE_URL", ""))
 DATABASE_PATH = os.environ.get(
     "DATABASE_PATH",
     os.path.join(os.path.dirname(__file__), "..", "..", "database", "nalavariyam.db"),
@@ -238,7 +307,7 @@ def fetch_one(query: str, params: tuple = ()) -> Optional[dict]:
                     cur.execute(_translate_query_for_pg(query), params)
                     row = cur.fetchone()
                     return _pg_row_to_dict(cur, row)
-                except psycopg2_st.OperationalError:
+                except psycopg2.errors.OperationalError:
                     # Stale pooled connection (remote server closed it) — retry on a fresh one
                     conn.rollback()
                     _put_pg_connection(conn, discard=True)
@@ -262,7 +331,7 @@ def fetch_all(query: str, params: tuple = ()) -> list[dict]:
                     cur.execute(_translate_query_for_pg(query), params)
                     rows = cur.fetchall()
                     return _pg_rows_to_dicts(cur, rows)
-                except psycopg2_st.OperationalError:
+                except psycopg2.errors.OperationalError:
                     conn.rollback()
                     _put_pg_connection(conn, discard=True)
                     if attempt == 2:

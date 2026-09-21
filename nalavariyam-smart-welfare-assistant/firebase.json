@@ -8,13 +8,6 @@
     ],
     "rewrites": [
       {
-        "source": "/api/**",
-        "function": {
-          "functionId": "api",
-          "pinTag": true
-        }
-      },
-      {
         "source": "**",
         "destination": "/index.html"
       }
@@ -28,37 +21,7 @@
             "value": "public, max-age=31536000, immutable"
           }
         ]
-      },
-      {
-        "source": "/api/**",
-        "headers": [
-          {
-            "key": "Cache-Control",
-            "value": "no-store, no-cache, must-revalidate, max-age=0"
-          }
-        ]
       }
     ]
-  },
-  "functions": [
-    {
-      "source": "backend",
-      "codebase": "default",
-      "runtime": "python311",
-      "timeout": "120s",
-      "availableMemoryMb": 512,
-      "maxInstances": 10,
-      "ingressSettings": "ALLOW_ALL_TRAFFIC",
-      "envVars": {},
-      "ignore": [
-        "**/__pycache__/**",
-        "**/*.pyc",
-        "**/.env",
-        "**/nalavariyam.db"
-      ]
-    }
-  ],
-  "storage": {
-    "rules": "storage.rules"
   }
 }
